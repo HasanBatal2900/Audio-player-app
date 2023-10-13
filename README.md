@@ -8,7 +8,7 @@ The app Provide alot of features which you need in any audio playre app like pla
 play,stop, skip to next, skip to previous , increase and decrease the speed of the audio , also using riverpod the abiltiy to add songs to favoriate page
 with the ability to add or to remove from this page ,also with a search bar which can help you find a spefic song from its name , also you can sort the 
 songs in the app in alot and different way like sort increasly... etc, 
-# Future Features will added 
+# Future Features will be added 
 - show mini controller to the audio file which you can see in the main page of all songs .
 - show notification and the ability to play the audio in the background .
 - the ability to store the favoraite songs in the device using sqflite package.
