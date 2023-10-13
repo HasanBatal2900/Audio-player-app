@@ -15,9 +15,10 @@ import 'package:audioplayers/audioplayers.dart';
 import '../../core/constants/audio_control.dart';
 
 class AudioPage extends ConsumerStatefulWidget {
-  AudioPage({super.key, required this.isFavoriate, required this.currentIndex});
-  bool isFavoriate;
-  int currentIndex;
+  const AudioPage(
+      {super.key, required this.isFavoriate, required this.currentIndex});
+  final bool isFavoriate;
+  final int currentIndex;
   @override
   ConsumerState<AudioPage> createState() => _AudioPageState();
 }
@@ -33,6 +34,8 @@ class _AudioPageState extends ConsumerState<AudioPage>
   late AnimationController fadeController;
   late Animation<double> fadeAnimation;
   late List<SongInfo> songList;
+
+  late int currentIndex;
   void changePlayerStatus() {
     setState(() {
       isPlaying = !isPlaying;
@@ -55,6 +58,7 @@ class _AudioPageState extends ConsumerState<AudioPage>
         ? ref.read(allSongsProvider)
         : ref.read(favoraiteProvider);
 
+    currentIndex = widget.currentIndex;
     initAudio(songList[widget.currentIndex].filePath);
     rotateController = AnimationController(
       vsync: this,
@@ -104,7 +108,7 @@ class _AudioPageState extends ConsumerState<AudioPage>
         } else if (event == PlayerState.completed) {
           setState(
             () {
-              widget.currentIndex++;
+              currentIndex++;
               getTotalDuration();
               audioPlayer.play(
                 DeviceFileSource(songList[widget.currentIndex].filePath),
@@ -131,7 +135,7 @@ class _AudioPageState extends ConsumerState<AudioPage>
   bool randomSelection = false;
   @override
   Widget build(BuildContext context) {
-    SongInfo songInfo = songList[widget.currentIndex];
+    SongInfo songInfo = songList[currentIndex];
     bool addedOrRemoveFav = ref.read(favoraiteProvider).contains(songInfo);
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 48, 38, 56),
@@ -278,16 +282,15 @@ class _AudioPageState extends ConsumerState<AudioPage>
               children: [
                 IconButton(
                   onPressed: () async {
-                    if (widget.currentIndex - 1 > 0) {
+                    if (currentIndex - 1 > 0) {
                       setState(() {
-                        widget.currentIndex = widget.currentIndex--;
-                        log("Current index is ${widget.currentIndex}");
-                        audioDuration = audioPlayer.getDuration() as Duration;
+                        currentIndex--;
+                        log("Current index is $currentIndex");
                         setNextSettings();
                       });
                     } else {
                       setState(() {
-                        widget.currentIndex = songList.length - 1;
+                        currentIndex = songList.length - 1;
                         currentDurationProgress = Duration.zero;
                         setNextSettings();
                       });
@@ -328,16 +331,16 @@ class _AudioPageState extends ConsumerState<AudioPage>
                 ),
                 IconButton(
                   onPressed: () async {
-                    if (widget.currentIndex + 1 < songList.length - 1) {
+                    if (currentIndex + 1 < songList.length - 1) {
                       setState(() {
-                        widget.currentIndex++;
-                        log("Current index is ${widget.currentIndex}");
+                        currentIndex++;
+                        log("Current index is $currentIndex");
                         currentDurationProgress = Duration.zero;
                         setNextSettings();
                       });
                     } else {
                       setState(() {
-                        widget.currentIndex = 0;
+                        currentIndex = 0;
                         currentDurationProgress = Duration.zero;
                         setNextSettings();
                       });
